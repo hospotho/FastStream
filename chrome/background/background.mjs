@@ -410,7 +410,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       });
     }
 
-    onSourceRecieved({
+    onSourceReceived({
       url: msg.url,
       requestId: -1,
       customHeaders: headers,
@@ -764,7 +764,7 @@ function checkYTURL(frame) {
   }
 
   if (URLUtils.is_url_yt(url) && URLUtils.is_url_yt_watch(url)) {
-    onSourceRecieved({
+    onSourceReceived({
       url: url,
       requestId: -1,
     }, frame, PlayerModes.ACCELERATED_YT);
@@ -777,7 +777,7 @@ function checkURLMatch(frame) {
   if (ext) {
     const mode = URLUtils.getModeFromExtension(ext);
     if (!mode) return;
-    onSourceRecieved({
+    onSourceReceived({
       url: url,
       requestId: -1,
     }, frame, mode);
@@ -1190,7 +1190,7 @@ function setFrameClaim(frame, claimed) {
   if (Logging) console.log('Integration released', frame.url, '- releasing', held.length, 'source(s)');
 
   held.forEach((source) => {
-    onSourceRecieved({
+    onSourceReceived({
       url: source.url,
       requestId: -1,
       customHeaders: source.headers,
@@ -1368,7 +1368,7 @@ async function sendSourcesToMainFramePlayers(frame) {
   }
 }
 
-async function onSourceRecieved(details, frame, mode) {
+async function onSourceReceived(details, frame, mode) {
   if ((URLUtils.is_url_yt(frame.url) || URLUtils.is_url_yt(frame.tab.url)) && mode !== PlayerModes.ACCELERATED_YT) {
     return;
   }
@@ -1545,7 +1545,7 @@ chrome.webRequest.onHeadersReceived.addListener(
       }
 
       VpnMirror?.noteSource(details);
-      onSourceRecieved(details, frame, mode);
+      onSourceReceived(details, frame, mode);
     }, {
       urls: ['<all_urls>'],
     }, webRequestPerms2,
