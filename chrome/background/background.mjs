@@ -1518,6 +1518,9 @@ chrome.webRequest.onHeadersReceived.addListener(
       const frame = tab.getFrameOrCreate(details.frameId);
       if (frame.hasPlayer()) return;
 
+      if (details.statusCode !== 304 && details.statusCode >= 300 && details.statusCode < 400) {
+        return; // Redirects. Ignore it
+      }
       if ((details.statusCode >= 400 && details.statusCode < 600) || details.statusCode === 204) {
         return; // Client or server error. Ignore it
       }
